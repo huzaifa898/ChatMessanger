@@ -17,7 +17,7 @@ export default function Home() {
            height="48"
            width="48"
            className='mx-auto w-auto'
-           src="/images/logo.jpg"
+           src="/images/logo.png"
            />
            <h2 className='
            mt-6
@@ -27,7 +27,7 @@ export default function Home() {
            tracking-tight
            text-gray-900
            '>
-             Sign In To Your Account
+             Log In To Your Account
            </h2>
           </div>
           <AuthForm />
