@@ -2,14 +2,26 @@
 import Button from '@/components/Button';
 import Input from '@/components/inputs/Input';
 import AuthSocialButton from '../components/AuthSocialButton';
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm ,FieldValues ,SubmitHandler } from "react-hook-form";
 import { BsGithub, BsGoogle } from 'react-icons/bs';
 import axios from 'axios';
+import toast from 'react-hot-toast';
+import {signIn ,useSession} from "next-auth/react"
+import {useRouter} from "next/navigation"
 type Variant = 'login' | 'register';
 const AuthForm = () => {
+    const session = useSession();
+    const router = useRouter();
     const [variant ,setVariant] = useState <Variant>('login');
     const [isloading, setIsLoading] = useState(false);
+     
+    useEffect(() => {
+     if(session ?.status === 'authenticated'){
+        router.push('/users');
+     }
+    }, [session?.status ,router]);
+
 
     const toggleVarient =  useCallback(() => {
         if(variant === 'login'){
@@ -36,12 +48,29 @@ const AuthForm = () => {
         try {
             if (variant === 'register') {
                 // axios call to register
-                const response = await axios.post('/api/register', data);
-                console.log('Registration successful:', response.data);
+                const response = await axios.post('/api/register', data)
+                .then(() => signIn ('credentials',data))
+                .catch(() => toast.error('Something Went Wrong'))
+                .finally(() => setIsLoading(false))
+                //console.log('Registration successful:', response.data);
             }
 
             if (variant === 'login') {
                 // axios call to login
+                signIn('credentials' ,{
+                    ...data,
+                    redirect: false
+                })
+                .then((callback) =>{
+                   if(callback?.error){
+                    toast.error('Invaild Credentials')
+                   }
+                   if (callback?.ok && !callback?.error){
+                    toast.success('successfully login')
+                    router.push('/users');
+                   }
+                })
+                .finally(() => setIsLoading(false));
             }
         } catch (error) {
             console.error('Error during registration:', error);
