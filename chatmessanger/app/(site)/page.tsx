@@ -27,7 +27,7 @@ export default function Home() {
            tracking-tight
            text-gray-900
            '>
-             Log In To Your Account
+             Log In Into Octaloop ChatMessanger
            </h2>
           </div>
           <AuthForm />

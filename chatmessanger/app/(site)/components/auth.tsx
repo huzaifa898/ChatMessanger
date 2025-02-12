@@ -5,11 +5,11 @@ import AuthSocialButton from '../components/AuthSocialButton';
 import { useCallback, useState } from "react";
 import { useForm ,FieldValues ,SubmitHandler } from "react-hook-form";
 import { BsGithub, BsGoogle } from 'react-icons/bs';
+import axios from 'axios';
 type Variant = 'login' | 'register';
 const AuthForm = () => {
     const [variant ,setVariant] = useState <Variant>('login');
     const [isloading, setIsLoading] = useState(false);
-
 
     const toggleVarient =  useCallback(() => {
         if(variant === 'login'){
@@ -17,42 +17,46 @@ const AuthForm = () => {
         }else{
             setVariant('login');
         }
-        } ,[variant]);
+    }, [variant]);
         
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<FieldValues>(
-        {
-            defaultValues:{
-                name:'',
-                email:'',
-                password:'',
-               
-            }
+    } = useForm<FieldValues>({
+        defaultValues:{
+            name:'',
+            email:'',
+            password:'',
         }
-    );
+    });
 
     const onSubmit : SubmitHandler<FieldValues> = async (data) => {
         setIsLoading(true);
-        if (variant === 'register'){
-            // axios call to register
-        }
+        try {
+            if (variant === 'register') {
+                // axios call to register
+                const response = await axios.post('/api/register', data);
+                console.log('Registration successful:', response.data);
+            }
 
-        if (variant === 'login'){
-            // axios call to login
+            if (variant === 'login') {
+                // axios call to login
+            }
+        } catch (error) {
+            console.error('Error during registration:', error);
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
-
     }
 
-    const socialAction =(action:string) => {
+    const socialAction = (action: string) => {
         setIsLoading(true);
         // axios call to social login
         setIsLoading(false);
     }
-    return(
+
+    return (
         <div className="
         mt-8
         sm:mx-auto
@@ -67,16 +71,16 @@ const AuthForm = () => {
             sm:rounded-lg
             sm:px-10
             ">
-             <form
-             className="space-y-6"
-             onSubmit={handleSubmit(onSubmit)}
-             >
-                {variant === 'register' && (
-                    <Input id="email"
-                    label='Email' 
-                    register={register}
-                    error={errors} 
-                    />
+                <form
+                className="space-y-6"
+                onSubmit={handleSubmit(onSubmit)}
+                >
+                    {variant === 'register' && (
+                        <Input id="name"
+                        label='Name' 
+                        register={register}
+                        error={errors} 
+                        />
                     )}
                     <Input id="email"
                     label='Email address' 
@@ -85,7 +89,7 @@ const AuthForm = () => {
                     error={errors} 
                     />
                     <Input id="password"
-                    label='password' 
+                    label='Password' 
                     type='password'
                     register={register}
                     error={errors} 
@@ -96,61 +100,54 @@ const AuthForm = () => {
                         fullWidth
                         type='submit'
                         >
-                        {variant === 'login' ? 'Sign In': 'register'}
+                        {variant === 'login' ? 'Sign In' : 'Register'}
                         </Button>
                     </div>
-             </form>
+                </form>
                 
                 <div className='mt-6'>
                     <div className='relative'>
-                        <div 
-                        className='absolute inset-0 flex items-center'>
-                           <div className='w-full border-t border-gray-300'></div>
-
+                        <div className='absolute inset-0 flex items-center'>
+                            <div className='w-full border-t border-gray-300'></div>
                         </div>
                         <div className='relative flex justify-center text-sm'>
-                              <span className='bg-white px-2 text-gray-500'>
+                            <span className='bg-white px-2 text-gray-500'>
                                 Or continue with
-                              </span>
+                            </span>
                         </div>
                     </div>
-                      <div className='mt-6 flex gap-2'>
+                    <div className='mt-6 flex gap-2'>
                         <AuthSocialButton
-                         Icon={BsGithub}
-                         onClick={() => socialAction('github')}
+                        Icon={BsGithub}
+                        onClick={() => socialAction('github')}
                         />
                         <AuthSocialButton
-                         Icon={BsGoogle}
-                         onClick={() => socialAction('google')}
+                        Icon={BsGoogle}
+                        onClick={() => socialAction('google')}
                         />
-                      </div>
+                    </div>
                 </div>
                  
-                 <div className="
-                 flex
-                 gap-2
-                 justify-center
-                 text-sm
-                 mt-6
-                 px-2
-                 text-gray-500
-                 ">
-                   <div>
-                    {variant === 'login' ? 'New to Chat Messanger?': 'Already have an account?'}
-                   </div>
-                   <div 
-                  onClick={toggleVarient}
-                  className='underline cursor-pointer'
-                  >
-                    {variant === 'login' ? 'Create an Account': 'Log In'}
-                  </div>
-                 </div>
-                  
-                 
-
-
+                <div className="
+                flex
+                gap-2
+                justify-center
+                text-sm
+                mt-6
+                px-2
+                text-gray-500
+                ">
+                    <div>
+                        {variant === 'login' ? 'New to Chat Messenger?' : 'Already have an account?'}
+                    </div>
+                    <div 
+                    onClick={toggleVarient}
+                    className='underline cursor-pointer'
+                    >
+                        {variant === 'login' ? 'Create an Account' : 'Log In'}
+                    </div>
+                </div>
             </div>
-     
         </div>
     );
 }
