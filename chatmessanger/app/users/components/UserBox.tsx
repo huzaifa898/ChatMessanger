@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
 import Avatar from "@/components/Avatar";
+import LoadingModal from "@/components/LoadingModal";
 //import LoadingModal from "@/app/components/LoadingModal";
 
 interface UserBoxProps {
@@ -32,9 +33,9 @@ const UserBox: React.FC<UserBoxProps> = ({
 
   return (
     <>
-      {/* {isLoading && (
+       {isLoading && (
         <LoadingModal />
-      )} */}
+      )} 
       <div
         onClick={handleClick}
         className="
@@ -52,6 +53,8 @@ const UserBox: React.FC<UserBoxProps> = ({
         "
       >
         <Avatar user={data} />
+
+          
         <div className="min-w-0 flex-1">
           <div className="focus:outline-none">
             <div
