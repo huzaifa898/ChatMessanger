@@ -74,14 +74,13 @@ const Form = () => {
         w-full
       "
     >
-      <CldUploadButton
+       <CldUploadButton
   options={{ maxFiles: 1 }}
   uploadPreset="mrux4f5y"
   onSuccess={(result: any) => handleUpload(result)}
 >
   <HiPhoto size={30} className="text-sky-500 cursor-pointer" />
 </CldUploadButton>
-
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex items-center gap-2 lg:gap-4 w-full"

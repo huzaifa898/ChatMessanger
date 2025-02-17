@@ -4,6 +4,7 @@ import { useState } from "react"
 import DesktopItem from "./DesktopItem"
 import {User} from "@prisma/client"
 import Avatar from "../Avatar"
+import SettingModal from "./SettingsModal"
 interface DesktopSidebarProps{
     currentUser: User
 }
@@ -14,6 +15,12 @@ const DestopSideBar : React.FC<DesktopSidebarProps> = ({currentUser}) => {
 
     console.log({currentUser})
     return(
+      <>
+      <SettingModal
+         currentUser = {currentUser}
+         isOpen = {isOpen}
+         onClose ={() => setIsOpen(false)}
+      />
         <div className="
            hidden
           lg:fixed
@@ -80,6 +87,7 @@ const DestopSideBar : React.FC<DesktopSidebarProps> = ({currentUser}) => {
           </div>
         </nav>
         </div>
+        </>
     );
 }
 export default DestopSideBar;
