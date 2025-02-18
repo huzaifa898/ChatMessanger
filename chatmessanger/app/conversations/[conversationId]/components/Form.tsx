@@ -35,29 +35,13 @@ const Form = () => {
       ...data,
       conversationId
     })
-    .then(response => {
-      console.log('Message sent:', response.data);
-    })
-    .catch(error => {
-      console.error('Error sending message:', error);
-    });
   };
 
   const handleUpload = (result: any) => {
-    if (result?.info?.secure_url) {
-      axios.post('/api/messages', {
-        image: result.info.secure_url,
-        conversationId
-      })
-      .then(response => {
-        console.log('Image uploaded:', response.data);
-      })
-      .catch(error => {
-        console.error('Error uploading image:', error);
-      });
-    } else {
-      console.error('Upload failed:', result);
-    }
+    axios.post('/api/messages', {
+      image: result?.info?.secure_url,
+      conversationId
+    })
   }
 
   return ( 
@@ -74,13 +58,13 @@ const Form = () => {
         w-full
       "
     >
-       <CldUploadButton
-  options={{ maxFiles: 1 }}
-  uploadPreset="mrux4f5y"
-  onSuccess={(result: any) => handleUpload(result)}
->
-  <HiPhoto size={30} className="text-sky-500 cursor-pointer" />
-</CldUploadButton>
+      <CldUploadButton
+        options={{ maxFiles: 1 }}
+        onUpload={handleUpload}
+        uploadPreset="rvqpn2mu"
+      >
+        <HiPhoto size={30} className="text-sky-500" />
+      </CldUploadButton>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex items-center gap-2 lg:gap-4 w-full"
