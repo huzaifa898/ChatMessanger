@@ -12,6 +12,11 @@ export async function POST(
     const {
       message,
       image,
+      audio,
+      video,
+      file,
+      fileName,
+      fileType,
       conversationId
     } = body;
 
@@ -19,26 +24,31 @@ export async function POST(
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    const newMessage = await prisma.message.create({
-      data: {
-        body: message,
-        image: image,
-        conversation: {
-          connect: {
-            id: conversationId
-          }
-        },
-        sender: {
-          connect: {
-            id: currentUser.id
-          }
-        },
-        seen: {
-          connect: {
-            id: currentUser.id
-          }
-        }
+    const messageData: any = {
+      conversation: {
+        connect: { id: conversationId }
       },
+      sender: {
+        connect: { id: currentUser.id }
+      },
+      seen: {
+        connect: {
+          id: currentUser.id
+        }
+      }
+    };
+
+    // Only add fields that are present
+    if (message) messageData.body = message;
+    if (image) messageData.image = image;
+    if (audio) messageData.audio = audio;
+    if (video) messageData.video = video;
+    if (file) messageData.file = file;
+    if (fileName) messageData.fileName = fileName;
+    if (fileType) messageData.fileType = fileType;
+
+    const newMessage = await prisma.message.create({
+      data: messageData,
       include: {
         seen: true,
         sender: true,

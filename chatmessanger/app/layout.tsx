@@ -4,6 +4,8 @@ import "./globals.css";
 import ToasterContext from "./context/ToasterContext";
 import AuthContext from "./context/AuthContext";
 import ActiveStatus from "./components/ActiveStatus";
+import { ThemeProvider } from './context/ThemeContext'
+import ThemeToggle from '@/components/ThemeToggle';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,19 +24,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthContext>
-        <ToasterContext/>
-        <ActiveStatus/>
-        {children}
-        </AuthContext>
+        <ThemeProvider>
+          <AuthContext>
+            <ToasterContext />
+            <ActiveStatus />
+            {children}
+            <ThemeToggle />
+          </AuthContext>
+        </ThemeProvider>
       </body>
     </html>
   );

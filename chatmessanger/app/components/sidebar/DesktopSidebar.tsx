@@ -5,13 +5,17 @@ import DesktopItem from "./DesktopItem"
 import {User} from "@prisma/client"
 import Avatar from "../Avatar"
 import SettingModal from "./SettingsModal"
+import { MdLightMode, MdDarkMode } from "react-icons/md"
+import { useTheme } from "@/context/ThemeContext"
+
 interface DesktopSidebarProps{
     currentUser: User
 }
 
-const DestopSideBar : React.FC<DesktopSidebarProps> = ({currentUser}) => {
+const DesktopSidebar : React.FC<DesktopSidebarProps> = ({currentUser}) => {
     const routes = useRoutes();
     const [isOpen, setIsOpen] = useState(false);
+    const { isDarkMode, toggleDarkMode } = useTheme();
 
     console.log({currentUser})
     return(
@@ -31,6 +35,7 @@ const DestopSideBar : React.FC<DesktopSidebarProps> = ({currentUser}) => {
           xl:px-6
           lg:overflow-y-auto
           lg:bg-white
+          dark:lg:bg-gray-900
           lg:border-r-[1px]
           lg:pb-4
           lg:flex
@@ -76,11 +81,26 @@ const DestopSideBar : React.FC<DesktopSidebarProps> = ({currentUser}) => {
           "
         >
           <div
+            onClick={toggleDarkMode}
+            className="
+              cursor-pointer
+              hover:opacity-75
+              transition
+            "
+          >
+            {isDarkMode ? (
+              <MdLightMode className="h-6 w-6 text-yellow-500" />
+            ) : (
+              <MdDarkMode className="h-6 w-6 text-gray-500" />
+            )}
+          </div>
+          <div
             onClick={() => setIsOpen(true)}
             className="
               cursor-pointer
               hover:opacity-75
               transition
+              mt-4
             "
           >
             <Avatar user={currentUser} />
@@ -90,4 +110,4 @@ const DestopSideBar : React.FC<DesktopSidebarProps> = ({currentUser}) => {
         </>
     );
 }
-export default DestopSideBar;
+export default DesktopSidebar;

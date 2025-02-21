@@ -64,18 +64,19 @@ const ConversationBox : React.FC <ConversationBoxProps> = ({
         <div
         onClick={handleClick}
         className={clsx(`
-          w-full,
-          relative
-          flex
-          items-center
-          space-x-3
+          w-full 
+          relative 
+          flex 
+          items-center 
+          space-x-3 
+          p-3 
           hover:bg-neutral-100
+          dark:hover:bg-gray-800
           rounded-lg
           transition
           cursor-pointer
-          p-3
         `,
-          selected ? 'bg-neutral-100' : 'bg-white'
+          selected ? 'bg-neutral-100 dark:bg-gray-800' : 'bg-white dark:bg-gray-900'
         )}
       >
 
@@ -97,33 +98,29 @@ const ConversationBox : React.FC <ConversationBoxProps> = ({
                 mb-1
               "
             >
-              <p
-                className="
-                  text-md
-                  font-medium
-                  text-gray-900
-                "
-              >
-                {data.name || otherUser.name}
-              </p>
-              {lastMessage?.createdAt && (
-                <p
-                  className="
-                    text-xs
-                    text-gray-400
-                    font-light
-                  "
-                >
-                  {format(new Date(lastMessage.createdAt), 'p')}
-                </p>
-              )}
+              <div className="flex flex-col">
+                <div className="text-md font-medium text-gray-900 dark:text-gray-100">
+                  {data.name || otherUser.name}
+                </div>
+                {lastMessage?.createdAt && (
+                  <p
+                    className="
+                      text-xs
+                      text-gray-400
+                      font-light
+                    "
+                  >
+                    {format(new Date(lastMessage.createdAt), 'p')}
+                  </p>
+                )}
+              </div>
             </div>
             <p
               className={clsx(`
                 truncate
                 text-sm
               `,
-                hasSeen ? 'text-gray-500' : 'text-black font-medium'
+                hasSeen ? 'text-gray-500 dark:text-gray-400' : 'text-black font-medium dark:text-gray-100'
               )}
             >
               {lastMessageText}

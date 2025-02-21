@@ -2,12 +2,14 @@
 
 import useConversation from "@/hooks/useConversation";
 import useRoutes from "@/hooks/useRoutes";
-
 import MobileItem from "./MobileItem";
+import { useTheme } from "@/context/ThemeContext";
+import { MdLightMode, MdDarkMode } from "react-icons/md";
 
 const MobileFooter = () => {
   const routes = useRoutes();
   const { isOpen } = useConversation();
+  const { isDarkMode, toggleDarkMode } = useTheme();
 
   if (isOpen) {
     return null;
@@ -24,6 +26,7 @@ const MobileFooter = () => {
         flex
         items-center
         bg-white
+        dark:bg-gray-900
         border-t-[1px]
         lg:hidden
       "
@@ -37,6 +40,16 @@ const MobileFooter = () => {
           onClick={route.onClick}
         />
       ))}
+      <div
+        onClick={toggleDarkMode}
+        className="cursor-pointer hover:opacity-75 transition p-4"
+      >
+        {isDarkMode ? (
+          <MdLightMode className="h-6 w-6 text-yellow-500" />
+        ) : (
+          <MdDarkMode className="h-6 w-6 text-gray-500" />
+        )}
+      </div>
     </div>
    );
 }

@@ -24,7 +24,7 @@ const MobileItem: React.FC<MobileItemProps> = ({
 
   return ( 
     <Link 
-      onClick={onClick}
+      onClick={handleClick}
       href={href}
       className={clsx(`
         group
@@ -36,11 +36,13 @@ const MobileItem: React.FC<MobileItemProps> = ({
         w-full
         justify-center
         p-4
-        text-gray-500
         hover:text-black
+        dark:hover:text-white
         hover:bg-gray-100
+        dark:hover:bg-gray-800
+        transition
       `,
-        active && "bg-gray-100 text-black"
+        active ? 'bg-gray-100 dark:bg-gray-800 text-black dark:text-white' : 'text-gray-500 dark:text-gray-400'
       )}
     >
       <Icon className="h-6 w-6" />

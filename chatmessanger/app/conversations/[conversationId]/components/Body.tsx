@@ -14,6 +14,25 @@ interface BodyProps {
   initialMessages: FullMessageType[]
 }
 
+const getMessagePreview = (message: FullMessageType) => {
+  if (message.body) {
+    return message.body;
+  }
+  if (message.image) {
+    return '📷 Photo';
+  }
+  if (message.video) {
+    return '🎥 Video';
+  }
+  if (message.audio) {
+    return '🎵 Voice message';
+  }
+  if (message.file) {
+    return `📎 ${message.fileName || 'Document'}`;
+  }
+  return '';
+};
+
 const Body: React.FC<BodyProps> = ({
   initialMessages
 }) => {
@@ -28,7 +47,7 @@ const Body: React.FC<BodyProps> = ({
 
   useEffect(() => {
     pusherClient.subscribe(conversationId);
-    bottomRef?.current?.scrollIntoView();
+    bottomRef?.current?.scrollIntoView({ behavior: 'smooth' });
 
     const messageHandler = (message: FullMessageType) => {
       axios.post(`/api/conversations/${conversationId}/seen`)
@@ -41,7 +60,7 @@ const Body: React.FC<BodyProps> = ({
         return [...current, message];
       });
 
-      bottomRef?.current?.scrollIntoView();
+      bottomRef?.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     const updateMessageHandler = (newMessage: FullMessageType) => {
@@ -65,13 +84,34 @@ const Body: React.FC<BodyProps> = ({
   }, [conversationId]);
   
   return ( 
-    <div className="flex-1 overflow-y-auto">
+    <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
       {messages.map((message, i) => (
-        <MessageBox
-          isLast={i === messages.length - 1}
-          key={message.id}
-          data={message}
-        />
+        <div key={message.id}>
+          <MessageBox
+            isLast={i === messages.length - 1}
+            data={message}
+          />
+          {message.image && (
+            <div className="text-xs text-gray-400 text-center mt-1">
+              Photo
+            </div>
+          )}
+          {message.video && (
+            <div className="text-xs text-gray-400 text-center mt-1">
+              Video
+            </div>
+          )}
+          {message.audio && (
+            <div className="text-xs text-gray-400 text-center mt-1">
+              Voice message
+            </div>
+          )}
+          {message.file && (
+            <div className="text-xs text-gray-400 text-center mt-1">
+              {message.fileName || 'Document'}
+            </div>
+          )}
+        </div>
       ))}
       <div ref={bottomRef} className="pt-24" />
     </div>

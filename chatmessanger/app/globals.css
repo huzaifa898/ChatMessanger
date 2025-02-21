@@ -7,3 +7,17 @@ body,
 :root{
   height: 100%;
 }
+
+/* Add smooth transitions for dark mode */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Dark mode styles */
+.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-white dark:bg-gray-900;
+}

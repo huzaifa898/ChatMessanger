@@ -8,7 +8,8 @@ interface MessageInputProps {
   type?: string;
   required?: boolean;
   register: UseFormRegister<FieldValues>;
-  errors: FieldErrors
+  errors: FieldErrors;
+  className?: string;
 }
 
 const MessageInput: React.FC<MessageInputProps> = ({
@@ -17,9 +18,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
   type,
   required,
   register,
-  errors
+  errors,
+  className = ''
 }) => {
-  return ( 
+  return (
     <div className="relative w-full">
       <input
         id={id}
@@ -29,17 +31,19 @@ const MessageInput: React.FC<MessageInputProps> = ({
         placeholder={placeholder}
         className="
           text-black
+          dark:text-white
           font-light
           py-2
           px-4
-          bg-neutral-100
-          w-full
+          bg-neutral-100 
+          dark:bg-gray-700
+          w-full 
           rounded-full
           focus:outline-none
         "
       />
     </div>
-   );
-}
- 
+  );
+};
+
 export default MessageInput;
